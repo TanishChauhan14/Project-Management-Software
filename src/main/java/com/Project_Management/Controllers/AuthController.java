@@ -3,7 +3,6 @@ package com.Project_Management.Controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Project_Management.Models.Users;
-import com.Project_Management.Repositories.UsersAuthRepo;
 import com.Project_Management.Services.UsersAuthServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,10 @@ public Users Register(@RequestBody Users user) {
 }
 
 // login 
-@PostMapping("login")
-public String Login(@RequestBody Users user) {
+@PostMapping("logins")
+public String login(@RequestBody Users user) throws Exception {
     
-    return usersAuthServices.Login(user) ;
+    return usersAuthServices.login(user) ;
 }
 
 

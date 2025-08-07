@@ -30,13 +30,15 @@ public class UsersAuthServices {
         return rs;
     }
 
-    public String Login(Users user){
+    public String login(Users user) throws Exception{
         Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 
         if(authentication.isAuthenticated()){
             return jwtgenerator.JWTgenerator(user.getUsername());
+        }else{
+            return "Fail";
         }
-        return "Fail";
+        
     }
 }

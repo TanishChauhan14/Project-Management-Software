@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
 
       return http.csrf(Customizer -> Customizer.disable())
-      .authorizeHttpRequests(requests -> requests.requestMatchers("login","register").permitAll().anyRequest().authenticated())
+      .authorizeHttpRequests(requests -> requests.requestMatchers("logins","register").permitAll().anyRequest().authenticated())
       .formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
     
