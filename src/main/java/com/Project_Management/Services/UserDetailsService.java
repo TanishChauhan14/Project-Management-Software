@@ -15,11 +15,20 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Autowired
     UserDetailsRepo repo;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            Users user = repo.findByUsername(username);
-            return new com.Project_Management.Models.UserPrincipal(user);  
+   @Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Users user = repo.findByUsername(username);
+    if(user == null) {
+        throw new UsernameNotFoundException("User not found with username: " + username);
     }
+
+    System.out.println("🔹 Loading user for login: " + username);
+    System.out.println("🔹 Hashed password from DB: " + user.getPassword());
+
+    return new com.Project_Management.Models.UserPrincipal(user);
+}
+
+
 
 
 }

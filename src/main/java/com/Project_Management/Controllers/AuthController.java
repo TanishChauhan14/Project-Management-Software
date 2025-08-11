@@ -2,6 +2,7 @@ package com.Project_Management.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Project_Management.DTO.ResetPasswordRequest;
 import com.Project_Management.Models.Users;
 import com.Project_Management.Services.UsersAuthServices;
 
@@ -39,6 +40,18 @@ public String login(@RequestBody Users user) throws Exception {
     
     return usersAuthServices.login(user) ;
 }
+
+@PostMapping("/resetpassword")
+public String resetpassword(@RequestBody ResetPasswordRequest request) throws Exception {
+    if(request.getNewPassword() == null || request.getNewPassword().trim().isEmpty()) {
+        return "New password cannot be empty";
+    }
+    return usersAuthServices.resetpassword(request.getNewPassword());
+}
+
+
+
+
 
 
 
