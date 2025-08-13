@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.Project_Management.Models.Users;
 
+
 @Repository
 public interface UsersAuthRepo extends JpaRepository<Users,Integer> {
 
     public Users findByUsername(String username);
+    public Users findByEmail(String email);
 }

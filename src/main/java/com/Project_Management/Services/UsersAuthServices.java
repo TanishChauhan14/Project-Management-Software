@@ -85,6 +85,29 @@ public class UsersAuthServices {
         return "Password reset successful. New token: " + newToken;
     }
 
+    public String forgetpassword(String forgetemail,String tempPassword) throws Exception {
+        Users users = repo.findByEmail(forgetemail);
+
+        if(users == null || users.toString().trim().isEmpty()){
+            return "Users Not Found";
+        }
+        users.setPassword(encoder.encode(tempPassword));
+        repo.save(users);
+        SecurityContextHolder.clearContext();
+
+        String newToken = jwtgenerator.JWTgenerator(users.getUsername());
+
+        System.out.println(" New JWT token: " + newToken);
+
+        System.out.println(users);
+
+        return "Your Temporary Password is sent to your Authenticated Email.Please reset your Password within 30 mints"+tempPassword ;
+    }
+
+
+    public String generateToken(String username)throws Exception {
+    return jwtgenerator.JWTgenerator(username);
+}
 
     
 

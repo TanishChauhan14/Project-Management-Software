@@ -1,7 +1,10 @@
 package com.Project_Management.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,6 +17,10 @@ public class Users {
     private String password;
     private String email;
     private String role;
+
+    @OneToOne
+    @JsonIgnore
+    private RefreshToken refreshToken;
 
     public Users() {
         super();
