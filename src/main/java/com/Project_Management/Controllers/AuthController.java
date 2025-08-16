@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     // Register
-    @PostMapping("register")
+    @PostMapping("/register")
     public Users Register(@RequestBody Users user) {
 
         Users registereduser = usersAuthServices.register(user);
@@ -44,21 +44,19 @@ public class AuthController {
     }
 
     // login
-@PostMapping("logins")
-public ResponseEntity<?> login(@RequestBody Users user) throws Exception {
-    String jwt = usersAuthServices.login(user); // JWT generate after auth
-    RefreshToken refreshToken = refreshServices.createOrUpdateRefreshToken(user.getUsername());
+    @PostMapping("/logins")
+    public ResponseEntity<?> login(@RequestBody Users user) throws Exception {
+        String jwt = usersAuthServices.login(user); 
+        RefreshToken refreshToken = refreshServices.createOrUpdateRefreshToken(user.getUsername());
 
-    Map<String, Object> response = new HashMap<>();
-    response.put("jwt", jwt);
-    response.put("refreshToken", refreshToken.getRefreshToken());
-    response.put("tokenId", refreshToken.getTokenId());
-    response.put("Expiry", refreshToken.getExpiry());
+        Map<String, Object> response = new HashMap<>();
+        response.put("jwt", jwt);
+        response.put("refreshToken", refreshToken.getRefreshToken());
+        response.put("RefreshtokenId", refreshToken.getTokenId());
+        response.put("Expiry", refreshToken.getExpiry());
 
-    return ResponseEntity.ok(response);
-}
-
-
+        return ResponseEntity.ok(response);
+    }
 
     // Reset PASSWORD
 
@@ -72,7 +70,7 @@ public ResponseEntity<?> login(@RequestBody Users user) throws Exception {
 
     // Forget
 
-    @PostMapping("forgetpassword")
+    @PostMapping("/forgetpassword")
     public String forgotpass(@RequestBody PasswordRequest request) throws Exception {
         if (request.getForgetemail() == null || request.getForgetemail().trim().isEmpty()) {
             return "Email cannot be empty";
@@ -81,21 +79,37 @@ public ResponseEntity<?> login(@RequestBody Users user) throws Exception {
     }
 
     // Refresh Token
-@PostMapping("refreshtoken")
+    @PostMapping("/refreshtoken")
 public ResponseEntity<?> refreshtoken(@RequestBody RefreshDTO refreshDTO) throws Exception {
-    // Validate karega, agar invalid/expired hai to exception
-    refreshServices.validateToken(refreshDTO.getRefreshToken(), refreshDTO.getTokenId());
+    try {
+        // 1. Validate the refresh token. This will throw an exception if it's not valid.
+        refreshServices.validateToken(refreshDTO.getRefreshToken(), refreshDTO.getTokenId());
+        
+        // 2. If validation succeeds, get the username from the token.
+        String username = refreshServices.getUsernameFromRefreshToken(refreshDTO.getRefreshToken());
+        
+        // 3. Generate a new JWT (access token).
+        String newJwt = usersAuthServices.generateToken(username);
 
-    // Agar valid hai → username nikalo
-    String username = refreshServices.getUsernameFromRefreshToken(refreshDTO.getRefreshToken());
+        // 4. Prepare the success response.
+        Map<String, Object> response = new HashMap<>();
+        response.put("jwt", newJwt);
+        return ResponseEntity.ok(response);
 
-    // Naya JWT generate karo
-    String newJwt = usersAuthServices.generateToken(username);
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("jwt", newJwt);
-
-    return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
 }
+
+    @PostMapping("/logoutuser")
+    public ResponseEntity<?> logout() {
+        String response = refreshServices.logoutUser();
+
+        if (response.startsWith("Logout successful")) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 
 }

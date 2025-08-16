@@ -2,7 +2,6 @@ package com.Project_Management.Models;
 
 import java.util.Collection;
 import java.util.Collections;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +16,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + users.getRole().toUpperCase()));
     }
 
     @Override
@@ -32,21 +31,21 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // ✅ account hamesha active
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // ✅ kabhi lock mat karo
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // ✅ password expiry disable
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // ✅ user hamesha enabled
+        return true;
     }
 }

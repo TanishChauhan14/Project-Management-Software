@@ -1,6 +1,5 @@
 package com.Project_Management.Services;
 
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -46,7 +44,7 @@ public class Jwtgenerator {
                 .add(claim)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60000))
+                .expiration(new Date(System.currentTimeMillis() + 120000))
                 .and()
                 .signWith(getkey())
                 .compact();
