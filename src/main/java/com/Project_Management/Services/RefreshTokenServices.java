@@ -19,7 +19,7 @@ import com.Project_Management.Repositories.RefreshTokenRepo;
 @Service
 public class RefreshTokenServices {
 
-    public Long expirydate = 80000L;
+    public Long expirydate = 10000000L;
 
     @Autowired
     private RefreshTokenRepo rTokenRepo;

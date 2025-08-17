@@ -1,90 +1,56 @@
 package com.Project_Management.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users") 
+@Data 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder 
 public class Users {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
+
+    @Column(nullable = false) 
     private String password;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
-    private String role;
+
+     @Enumerated(EnumType.STRING) 
+    @Column(nullable = false, length = 20)
+    private UserRole role; 
 
     @OneToOne
+    @JoinColumn(name = "refresh_token_token_id") 
     @JsonIgnore
     private RefreshToken refreshToken;
 
-    public RefreshToken getRefreshToken() {
-        return refreshToken;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void setRefreshToken(RefreshToken refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public Users() {
-        super();
-    }
-
-    public Users(int id, String username, String password, String email, String role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "Users [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", role="
-                + role + "]";
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

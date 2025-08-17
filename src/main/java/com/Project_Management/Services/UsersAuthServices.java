@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Project_Management.Models.ActivityType;
 import com.Project_Management.Models.Users;
 import com.Project_Management.Repositories.UsersAuthRepo;
 
@@ -27,9 +28,13 @@ public class UsersAuthServices {
     @Autowired
     private Jwtgenerator jwtgenerator;
 
+    @Autowired
+    private ActivityServices activityServices;
+
     public Users register(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
         Users rs = repo.save(user);
+        activityServices.addingrecentactivity(ActivityType.USER_ADDED, user);
         return rs;
     }
 

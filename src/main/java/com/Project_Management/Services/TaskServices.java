@@ -3,6 +3,7 @@ package com.Project_Management.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.Project_Management.Models.ActivityType;
 import com.Project_Management.Models.Project;
 import com.Project_Management.Models.Task;
 import com.Project_Management.Models.TaskStatus;
@@ -23,6 +24,9 @@ public class TaskServices {
     @Autowired
     private TaskRepo taskRepo;
 
+    @Autowired
+    private ActivityServices activityServices;
+
     public Task createTask(int projectid,int assignedid,Task taskdata){
         Project project =  projectRepo.findById(projectid).orElseThrow(() -> new RuntimeException("Project not found"));
         Users user = usersAuthRepo.findById(assignedid).orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -31,6 +35,7 @@ public class TaskServices {
         taskdata.setStatus(TaskStatus.TO_DO);
         taskdata.setProject(project);
 
+        activityServices.addingrecentactivity(ActivityType.TASK_ASSIGNED, user);
         return  taskRepo.save(taskdata);
         
     }

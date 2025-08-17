@@ -1,101 +1,55 @@
 package com.Project_Management.Models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Users owner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Users> members;
 
-    private String startdate;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime startdate;
 
-    public Project(int id, String name, String description, Users owner, List<Users> members, String startdate,
-            String deliverydate) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.owner = owner;
-        this.members = members;
-        this.startdate = startdate;
-        this.deliverydate = deliverydate;
-    }
+    private LocalDate deliverydate;
 
-    public Project() {
-    }
+    private List<String> clientrequirement;
 
-    public int getId() {
-        return id;
-    }
+    @Column(nullable = false,updatable = true)
+    @Enumerated(EnumType.STRING)
+    private rankproject levelofproject;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column(nullable = true,updatable = false)
+    private String referencewebsite;
 
-    public String getName() {
-        return name;
-    }
+    private Boolean approveddesign = false;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Enumerated(EnumType.STRING)
+    private Projectstatus status;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Users getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Users owner) {
-        this.owner = owner;
-    }
-
-    public List<Users> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Users> members) {
-        this.members = members;
-    }
-
-    public String getStartdate() {
-        return startdate;
-    }
-
-    public void setStartdate(String startdate) {
-        this.startdate = startdate;
-    }
-
-    public String getDeliverydate() {
-        return deliverydate;
-    }
-
-    public void setDeliverydate(String deliverydate) {
-        this.deliverydate = deliverydate;
-    }
-
-    private String deliverydate;
-
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

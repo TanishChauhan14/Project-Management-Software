@@ -44,7 +44,7 @@ public class Jwtgenerator {
                 .add(claim)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 120000))
+                .expiration(new Date(System.currentTimeMillis() + 1200000))
                 .and()
                 .signWith(getkey())
                 .compact();
