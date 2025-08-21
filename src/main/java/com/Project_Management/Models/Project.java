@@ -2,6 +2,7 @@ package com.Project_Management.Models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,10 +25,17 @@ public class Project {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
     private Users owner;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Users> members;
+    @ManyToMany
+@JoinTable(
+    name = "project_members",
+    joinColumns = @JoinColumn(name = "project_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id")
+)
+private List<Users> members = new ArrayList<>();
+
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -35,13 +43,14 @@ public class Project {
 
     private LocalDate deliverydate;
 
+    @ElementCollection
+    @CollectionTable(name = "project_requirements", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "requirement")
     private List<String> clientrequirement;
 
-    @Column(nullable = false,updatable = true)
     @Enumerated(EnumType.STRING)
     private rankproject levelofproject;
 
-    @Column(nullable = true,updatable = false)
     private String referencewebsite;
 
     private Boolean approveddesign = false;

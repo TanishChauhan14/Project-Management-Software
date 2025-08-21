@@ -5,14 +5,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "users") 
-@Data 
+@Table(name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder 
+@Builder
 public class Users {
 
     @Id
@@ -22,20 +23,24 @@ public class Users {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-     @Enumerated(EnumType.STRING) 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private UserRole role; 
+    private UserRole role;
 
     @OneToOne
-    @JoinColumn(name = "refresh_token_token_id") 
+    @JoinColumn(name = "refresh_token_token_id")
     @JsonIgnore
     private RefreshToken refreshToken;
+
+    @ManyToMany(mappedBy = "members")
+    @JsonIgnore 
+    private List<Project> projects = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

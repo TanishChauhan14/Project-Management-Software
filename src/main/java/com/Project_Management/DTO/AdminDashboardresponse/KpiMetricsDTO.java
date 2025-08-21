@@ -1,4 +1,4 @@
-package com.Project_Management.DTO.Dashboardresponse;
+package com.Project_Management.DTO.AdminDashboardresponse;
 
 import lombok.*;
 

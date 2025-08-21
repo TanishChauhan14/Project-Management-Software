@@ -11,8 +11,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.Project_Management.Services.Jwtgenerator;
-import com.Project_Management.Services.UserDetailsService;
+import com.Project_Management.ServicesImpl.Jwtgenerator;
+import com.Project_Management.ServicesImpl.UserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

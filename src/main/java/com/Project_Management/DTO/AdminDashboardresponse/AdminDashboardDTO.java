@@ -1,4 +1,4 @@
-package com.Project_Management.DTO.Dashboardresponse;
+package com.Project_Management.DTO.AdminDashboardresponse;
 
 
 import java.util.List;
@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class DashboardDTO {
+public class AdminDashboardDTO {
 
     private KpiMetricsDTO kpimetrics;
     private List<RiskAlertDTO> riskalert;

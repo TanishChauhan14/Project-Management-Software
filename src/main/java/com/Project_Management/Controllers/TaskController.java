@@ -2,6 +2,7 @@ package com.Project_Management.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Project_Management.DTO.TaskResponseDTO;
 import com.Project_Management.Models.Task;
 import com.Project_Management.Services.TaskServices;
 
@@ -17,7 +18,7 @@ public class TaskController {
     TaskServices taskServices;
 
     @PostMapping("createtask")
-    public Task createTask(@RequestBody Task task) {
+    public TaskResponseDTO createTask(@RequestBody Task task) {
         
     int projectid = task.getProject().getId();
     int assignedid = task.getAssignedto().getId();

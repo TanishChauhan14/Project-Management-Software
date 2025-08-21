@@ -1,24 +1,25 @@
-package com.Project_Management.Services;
+package com.Project_Management.ServicesImpl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.Project_Management.DTO.Dashboardresponse.DashboardDTO;
-import com.Project_Management.DTO.Dashboardresponse.KpiMetricsDTO;
-import com.Project_Management.DTO.Dashboardresponse.ProjectstatusDTO;
-import com.Project_Management.DTO.Dashboardresponse.RecentActivitiesDTO;
-import com.Project_Management.DTO.Dashboardresponse.RiskAlertDTO;
+import com.Project_Management.DTO.AdminDashboardresponse.AdminDashboardDTO;
+import com.Project_Management.DTO.AdminDashboardresponse.KpiMetricsDTO;
+import com.Project_Management.DTO.AdminDashboardresponse.ProjectstatusDTO;
+import com.Project_Management.DTO.AdminDashboardresponse.RecentActivitiesDTO;
+import com.Project_Management.DTO.AdminDashboardresponse.RiskAlertDTO;
 import com.Project_Management.Models.Projectstatus;
 import com.Project_Management.Models.UserRole;
 import com.Project_Management.Models.Users;
 import com.Project_Management.Repositories.ActivityRepo;
 import com.Project_Management.Repositories.ProjectRepo;
 import com.Project_Management.Repositories.UsersAuthRepo;
+import com.Project_Management.Services.AdminDashboardServices;
 
 @Service
-public class DashboardServices {
+public class AdminDashboardServicesImpl implements AdminDashboardServices {
 
     @Autowired
     private ActivityRepo activityRepo;
@@ -29,8 +30,9 @@ public class DashboardServices {
     @Autowired 
     private UsersAuthRepo usersAuthRepo;
 
-    public DashboardDTO Dashboardresponse() {
-        DashboardDTO dto = new DashboardDTO();
+    @Override
+    public AdminDashboardDTO Dashboardresponse() {
+        AdminDashboardDTO dto = new AdminDashboardDTO();
         int totalactiveprojects = (int) projectRepo.count();
         int totalclients = (int) usersAuthRepo.countByRole(UserRole.CLIENT);
         double teamUtilization = 10;

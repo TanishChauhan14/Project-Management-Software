@@ -1,9 +1,13 @@
 package com.Project_Management.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import com.Project_Management.DTO.ProjectRequestDTO;
 import com.Project_Management.Models.Project;
 import com.Project_Management.Services.ProjectServices;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +24,12 @@ public class ProjectController {
 
 
     @PostMapping("createproject")
-    public Project createProject(@RequestBody Project projectdata) {
+    public ResponseEntity<Project> createProject(@RequestBody ProjectRequestDTO dto) {
        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Project project = projectServices.createProject(projectdata, username);
-        return project;      
+        Project project = projectServices.createProject(dto, username);
+        return ResponseEntity.ok(project);      
     }
     
 }
