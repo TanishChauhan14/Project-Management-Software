@@ -28,14 +28,12 @@ public class Project {
     @JoinColumn(name = "owner_id", nullable = false)
     private Users owner;
 
-    @ManyToMany
-@JoinTable(
-    name = "project_members",
-    joinColumns = @JoinColumn(name = "project_id"),
-    inverseJoinColumns = @JoinColumn(name = "user_id")
-)
-private List<Users> members = new ArrayList<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "project_members", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Users> members = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false)

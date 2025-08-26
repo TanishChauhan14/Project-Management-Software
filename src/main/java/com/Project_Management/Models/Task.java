@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
@@ -34,8 +35,9 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-
+ 
     @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     @ManyToOne

@@ -10,17 +10,22 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
 
     @Column(nullable = false, unique = true, length = 50)
+    @ToString.Include
     private String username;
 
     @Column(nullable = false)
@@ -33,13 +38,20 @@ public class Users {
     @Column(nullable = false, length = 20)
     private UserRole role;
 
-    @OneToOne
+    @Builder.Default
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "refresh_token_token_id")
     @JsonIgnore
     private RefreshToken refreshToken;
 
+    @Builder.Default
     @ManyToMany(mappedBy = "members")
-    @JsonIgnore 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     private List<Project> projects = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)

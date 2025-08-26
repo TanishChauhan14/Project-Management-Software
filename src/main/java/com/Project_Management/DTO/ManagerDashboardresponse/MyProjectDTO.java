@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.Project_Management.Models.Projectstatus;
-import com.Project_Management.Models.Users;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

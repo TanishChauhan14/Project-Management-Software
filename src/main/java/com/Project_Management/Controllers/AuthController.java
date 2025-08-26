@@ -4,20 +4,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Project_Management.DTO.PasswordRequest;
 import com.Project_Management.DTO.RefreshDTO;
+import com.Project_Management.DTO.UsersShowResponse.UserReponses;
 import com.Project_Management.Models.RefreshToken;
 import com.Project_Management.Models.Users;
 import com.Project_Management.Services.RefreshTokenServices;
 import com.Project_Management.Services.UsersAuthServices;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class AuthController {
@@ -101,6 +108,9 @@ public ResponseEntity<?> refreshtoken(@RequestBody RefreshDTO refreshDTO) throws
     }
 }
 
+
+//Logout
+
     @PostMapping("/logoutuser")
     public ResponseEntity<?> logout() {
         String response = refreshServices.logoutUser();
@@ -111,5 +121,56 @@ public ResponseEntity<?> refreshtoken(@RequestBody RefreshDTO refreshDTO) throws
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+
+// Get All Users
+
+    @GetMapping("/getallusers")
+    public ResponseEntity<?> getallEntity(){
+
+        List<UserReponses> Users = usersAuthServices.getallUsers();
+        
+        return ResponseEntity.ok(Users);
+    }
+// Get User By Id 
+
+    @GetMapping("/getuserbyid/{id}")
+    public ResponseEntity<?> getuserbyid(@PathVariable int id) {
+        String reponses = usersAuthServices.getuserbyid(id);
+
+        return ResponseEntity.ok(reponses);
+    }
+    
+
+// Get All Users with pagination
+
+    @GetMapping("/getuserpageable")
+    public ResponseEntity<?> getMethodName(@RequestParam(defaultValue = "4") Integer pagesize,@RequestParam(defaultValue = "0") Integer pagenumber ) {
+        
+        return ResponseEntity.ok(usersAuthServices.getallUsers(pagesize, pagenumber));
+    }
+
+// Remove User
+
+     @DeleteMapping("/removeuser/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+        boolean deleted = usersAuthServices.removeUsers(id);
+        if (deleted) {
+            return ResponseEntity.ok("User deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("User not found with id: " + id);
+        }
+    }
+
+// Update User
+
+    @PutMapping("/updateuser")
+    public ResponseEntity<String> updateUser(@RequestBody UserReponses users) {
+        String response = usersAuthServices.Updateuser(users);
+        return ResponseEntity.ok(response);
+    }
+    
+    
 
 }
