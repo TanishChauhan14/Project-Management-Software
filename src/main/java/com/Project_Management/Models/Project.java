@@ -43,7 +43,7 @@ public class Project {
 
     @ElementCollection
     @CollectionTable(name = "project_requirements", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "requirement")
+    @Column(name = "clientrequirement")
     private List<String> clientrequirement;
 
     @Enumerated(EnumType.STRING)

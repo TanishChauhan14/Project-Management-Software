@@ -34,9 +34,15 @@ public class Users {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+      private String avatar; 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserRole role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private TeamDetails teamDetails;
 
     @Builder.Default
     @Column(name = "is_active", nullable = false)

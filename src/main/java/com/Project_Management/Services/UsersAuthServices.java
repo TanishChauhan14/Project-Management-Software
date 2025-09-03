@@ -2,12 +2,13 @@ package com.Project_Management.Services;
 
 import java.util.List;
 
+import com.Project_Management.DTO.UsersShowResponse.SetUserDTO;
 import com.Project_Management.DTO.UsersShowResponse.UserReponses;
 import com.Project_Management.Models.Users;
 
 public interface UsersAuthServices {
 
-    public Users register(Users user);
+    public Users register(SetUserDTO dto);
 
     public String login(Users user) throws Exception;
 

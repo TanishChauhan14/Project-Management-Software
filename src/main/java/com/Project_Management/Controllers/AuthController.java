@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Project_Management.DTO.PasswordRequest;
 import com.Project_Management.DTO.RefreshDTO;
+import com.Project_Management.DTO.UsersShowResponse.SetUserDTO;
 import com.Project_Management.DTO.UsersShowResponse.UserReponses;
 import com.Project_Management.Models.RefreshToken;
 import com.Project_Management.Models.Users;
@@ -43,7 +44,7 @@ public class AuthController {
 
     // Register
     @PostMapping("/register")
-    public Users Register(@RequestBody Users user) {
+    public Users Register(@RequestBody SetUserDTO user) {
 
         Users registereduser = usersAuthServices.register(user);
         return registereduser;

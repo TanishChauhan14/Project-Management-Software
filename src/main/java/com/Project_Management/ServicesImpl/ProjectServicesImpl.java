@@ -222,15 +222,15 @@ public class ProjectServicesImpl implements ProjectServices {
                        .stream()
                        .map(t -> new TaskDTO(
                         t.getId(),
-                        t.getAssigneddate(),
+                        t.getCreatedAt(),
                         t.getDescription(),
                         t.getStatus(),
                         new UserReponses(
-                            t.getAssignedto().getId(),
-                            t.getAssignedto().getUsername(),
-                            t.getAssignedto().getEmail(),
-                            t.getAssignedto().getRole(),
-                            t.getAssignedto().isActive()
+                            t.getAssignedTo().getId(),
+                            t.getAssignedTo().getUsername(),
+                            t.getAssignedTo().getEmail(),
+                            t.getAssignedTo().getRole(),
+                            t.getAssignedTo().isActive()
                         )
                         
                        )).collect(Collectors.toList())

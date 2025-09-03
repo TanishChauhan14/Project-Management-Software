@@ -15,9 +15,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Project_Management.DTO.UsersShowResponse.SetUserDTO;
 import com.Project_Management.DTO.UsersShowResponse.UserReponses;
 import com.Project_Management.Models.ActivityType;
+import com.Project_Management.Models.TeamDetails;
+import com.Project_Management.Models.UserRole;
 import com.Project_Management.Models.Users;
+import com.Project_Management.Repositories.TeamDetailsRepo;
 import com.Project_Management.Repositories.UsersAuthRepo;
 import com.Project_Management.Services.ActivityServices;
 import com.Project_Management.Services.UsersAuthServices;
@@ -40,13 +44,40 @@ public class UsersAuthServicesImpl implements UsersAuthServices {
     @Autowired
     private ActivityServices activityServices;
 
+    @Autowired
+    private TeamDetailsRepo teamDetailsRepo;
+
     @Override
-    public Users register(Users user) {
-        user.setPassword(encoder.encode(user.getPassword()));
+    public Users register(SetUserDTO dto) {
+        Users user = new Users();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(encoder.encode(dto.getPassword()));
+        user.setRole(dto.getRole());
+        user.setAvatar(dto.getAvatar());
+
         Users rs = repo.save(user);
         activityServices.addingrecentactivity(ActivityType.USER_ADDED, user);
+        if (user.getRole() == UserRole.EMPLOYEE || user.getRole() == UserRole.MANAGER) {
+            TeamDetails details = new TeamDetails();
+            details.setActiveProject(dto.getActiveProject());
+            details.setAddress(dto.getAddress());
+            details.setAvailability(dto.getAvailability());
+            details.setEmployee_role(dto.getEmp_role());
+            details.setLeavesTaken(0);
+            details.setPerformance(0);
+            details.setSalary(dto.getSalary());
+            details.setSkills(dto.getSkills());
+            details.setUser(user);
+            teamDetailsRepo.save(details);
+        }
+
         return rs;
     }
+
+
+
+    // Login
 
     @Override
     public String login(Users user) throws Exception {
@@ -192,19 +223,19 @@ public class UsersAuthServicesImpl implements UsersAuthServices {
             DBuser.setActive(users.getIsactive());
             repo.save(DBuser);
             activityServices.addingrecentactivity(ActivityType.USER_UPDATED, loggeduser);
-            return users.getUsername()+" Is Updated Successfully";
-        }else{
-            return users.getUsername()+" User not found";
+            return users.getUsername() + " Is Updated Successfully";
+        } else {
+            return users.getUsername() + " User not found";
         }
     }
 
     @Override
     public String getuserbyid(int id) {
-        
+
         Optional<Users> user = repo.findById(id);
         UserReponses response = new UserReponses();
 
-        if(user.isPresent()){
+        if (user.isPresent()) {
             Users DBuser = user.get();
             response.setUsername(DBuser.getUsername());
             response.setEmail(DBuser.getEmail());
@@ -212,9 +243,9 @@ public class UsersAuthServicesImpl implements UsersAuthServices {
             response.setUserid(id);
             response.setRole(DBuser.getRole());
 
-            return "Found : -{ "+response+" }";
-        }else{
-            return id+" Not Found";
+            return "Found : -{ " + response + " }";
+        } else {
+            return id + " Not Found";
         }
     }
 

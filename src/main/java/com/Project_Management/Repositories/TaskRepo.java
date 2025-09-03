@@ -11,7 +11,11 @@ import com.Project_Management.Models.TaskStatus;
 @Repository
 public interface TaskRepo extends JpaRepository<Task,Integer> {
 
-    List<Task> findByAssignedto_Id(int Employeeid);
 
     int countByStatus(TaskStatus toDo);
+
+    List<Task> findByAssignedTo_Id(int employeeid);
+
+    List<Task> findByProject_Id(int projectId);
+
 }

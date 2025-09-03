@@ -30,12 +30,12 @@ public class EmployeeDashboardServicesImpl implements EmployeeDashboardServices 
         EmployeeDashboardDTO employeeDashboardDTO = new EmployeeDashboardDTO();
         
         // Fetch all assigned tasks in a single database query.
-        List<Task> tasks = taskRepo.findByAssignedto_Id(employeeid);
+        List<Task> tasks = taskRepo.findByAssignedTo_Id(employeeid);
 
         // Filter and map today's tasks directly within the stream to create the DTOs.
         // This avoids making additional database calls for each task's project.
         List<MyTodayTask> TodayTasks = tasks.stream()
-            .filter(task -> task.getAssigneddate().isEqual(LocalDate.now()))
+            .filter(task -> task.getCreatedAt().isEqual(LocalDate.now()))
             .map(task -> {
                 MyProjectDTO projectDetails = new MyProjectDTO(
                     task.getProject().getId(),
