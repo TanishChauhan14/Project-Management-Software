@@ -10,4 +10,6 @@ public interface TeamdetailsServices {
 
     UserResponseDTO GetTeamMembersById(int id);
 
+    UserResponseDTO UpdateTeamMembers(int id, UserResponseDTO entity);
+
 }

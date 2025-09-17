@@ -13,6 +13,7 @@ import com.Project_Management.DTO.ManagerDashboardresponse.MyProjectDTO;
 import com.Project_Management.DTO.ManagerDashboardresponse.Teammembers;
 import com.Project_Management.DTO.UsersShowResponse.UserResponseDTO;
 import com.Project_Management.Models.TeamDetails;
+import com.Project_Management.Models.Users;
 import com.Project_Management.Repositories.TeamDetailsRepo;
 import com.Project_Management.Services.TeamdetailsServices;
 
@@ -135,6 +136,40 @@ public class TeamdetailsServicesImpl implements TeamdetailsServices {
          return TeamMemberDetails;
 
        
+    }
+
+
+    @Override
+    public UserResponseDTO UpdateTeamMembers(int id, UserResponseDTO entity) {
+        
+        Optional<TeamDetails> opteamDetails = teamDetailsRepo.findById(id);
+
+        if(opteamDetails.isPresent()){
+                TeamDetails teamDetails = opteamDetails.get();
+
+                teamDetails.setUser(new Users(id, 
+                                    entity.getUser_details().getUsername(),
+                                    teamDetails.getUser().getPassword(),
+                                    teamDetails.getUser().getEmail(),
+                                    teamDetails.getUser().getAvatar(), 
+                                    entity.getUser_role(), 
+                                    teamDetails,
+                                    teamDetails.getUser().isActive(),
+                                    teamDetails.getUser().getRefreshToken(), 
+                                    teamDetails.getUser().getProjects(), 
+                                    teamDetails.getUser().getCreatedAt(),
+                                    teamDetails.getUser().getUpdatedAt()));
+
+                teamDetails.setSkills(entity.getSkills());
+                teamDetails.setEmployee_role(entity.getEmp_role());
+
+                teamDetailsRepo.save(teamDetails);
+
+                return GetTeamMembersById(id);
+
+        }else{
+                throw new RuntimeException("Team Member Not Found");
+        }
     }
 
 }
