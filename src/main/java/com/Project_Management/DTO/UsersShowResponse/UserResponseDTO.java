@@ -15,7 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Builder
+@Builder 
 public class UserResponseDTO {
 
     private int user_id;
